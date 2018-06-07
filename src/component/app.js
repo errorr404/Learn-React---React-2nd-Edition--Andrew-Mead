@@ -12,7 +12,7 @@ export default class IndecisionApp extends React.Component {
       this.handleAddOption = this.handleAddOption.bind(this);
       this.handleDeleteOption = this.handleDeleteOption.bind(this);
     this.state= {
-    options: props.options
+    options: []
     };
   }
   // lifecycle methods componentDidMount(),componentDidUpdate(),  componentWillUnmount()
@@ -107,9 +107,7 @@ handleAddOption(option){
 // Create a react Component
 // Here first create the react component
 
-IndecisionApp.defaultProps = {
-  options: []
-}
+
 // change Header to stateless Function
 
 const Header = (props)=>{
