@@ -81,7 +81,6 @@ class AddNumbers extends React.Component {
       </div>
     );
   }
-
 }
 class Total extends React.Component {
   render(){

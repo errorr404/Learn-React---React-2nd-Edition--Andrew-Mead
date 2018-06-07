@@ -5,4 +5,4 @@ import IndecisionApp from './component/app'
 import Practice from './component/practice'
  //import User from './component/app'
 
- ReactDOM.render(<Practice />,document.getElementById('root'));
+ ReactDOM.render(<IndecisionApp />,document.getElementById('root'));

@@ -10,17 +10,56 @@ export default class IndecisionApp extends React.Component {
       this.handleDeleteOptions = this.handleDeleteOptions.bind(this);
       this.handlePick = this.handlePick.bind(this);
       this.handleAddOption = this.handleAddOption.bind(this);
+      this.handleDeleteOption = this.handleDeleteOption.bind(this);
     this.state= {
     options: props.options
     };
   }
+  // lifecycle methods componentDidMount(),componentDidUpdate(),  componentWillUnmount()
+
+  componentDidMount(){
+    // console.log('fetching Data');
+    try{
+      const json = localStorage.getItem('options');
+         const options = JSON.parse(json);
+
+         if (options) {
+           this.setState(() => ({ options }));
+         }
+    }catch(e) {
+        // Do nothing at all;
+
+    }
+
+  }
+  // componentDidUpdate fire when there is any update
+  componentDidUpdate(prevProps,prevState){
+    if(prevState.options.length !== this.state.options.length) {
+      const json = JSON.stringify(this.state.options);
+      localStorage.setItem('options',json);
+      // console.log('saving Data');
+    }
+
+  }
+  componentWillUnmount() {
+    console.log('componentWillUnmount');
+  }
   // handleDeleteOptions
   handleDeleteOptions() {
-    this.setState(() => {
-      return {
-        options: []
-      };
-    });
+    // this.setState(() => {
+    //   return {
+    //     options: []
+    //   };
+    // });
+     this.setState(()=>({options:[]}));
+  }
+  handleDeleteOption(optiontoRemove) {
+    // console.log('hdo',option);
+    this.setState((prevState)=>({
+     options: prevState.options.filter((option)=>{
+       return optiontoRemove !==option;
+     })
+    }));
   }
 // hadlePick - pass down to Action and setup onClick - bind Here
 // rendomly pick an option and alert it
@@ -37,11 +76,12 @@ handleAddOption(option){
   else if(this.state.options.indexOf(option)> -1){
     return 'This option Already exist'
   }
-  this.setState((prevState)=>{
-    return {
-    options: prevState.options.concat(option)  // concat in the prev aarray
-    };
-  });
+  // this.setState((prevState)=>{
+  //   return {
+  //   options: prevState.options.concat(option)  // concat in the prev aarray
+  //   };
+  // });
+  this.setState((prevState)=>({options: prevState.options.concat(option) }));
 }
   render(){
     const subTitle = 'Put your life in the hands of a computer';
@@ -51,8 +91,10 @@ handleAddOption(option){
         <Action hasOptions={this.state.options.length >0}
           handlePick={this.handlePick}
          />
-        <Options options ={this.state.options}
+        <Options
+          options ={this.state.options}
          handleDeleteOptions={this.handleDeleteOptions}
+         handleDeleteOption={this.handleDeleteOption}
         />
         <AddComponent
           handleAddOption={this.handleAddOption}
@@ -135,9 +177,16 @@ const Options = (props)=>{
   return (
         <div>
           <button onClick={props.handleDeleteOptions}>Remove All</button>
+          {props.options.length === 0 && <p>Please add an option to get started</p>}
           {
             // this.props.options.map((option)=><p key={option}>{option}</p>)
-            props.options.map((option)=> <Option key={option} optionText={option} />)
+            props.options.map((option)=> (
+              <Option
+                key={option}
+                optionText={option}
+                handleDeleteOption={props.handleDeleteOption}
+              />
+            ))
 
           }
         </div>
@@ -172,6 +221,11 @@ const Option = (props)=>{
   return(
       <div>
       {props.optionText}
+      <button onClick={(e)=>{
+        props.handleDeleteOption(props.optionText);
+      }}
+
+        >remove</button>
       </div>
   );
 };
@@ -208,12 +262,16 @@ class AddComponent extends React.Component {
     const option = e.target.elements.option.value.trim(); // trim leading and trilling spaces
      const error = this.props.handleAddOption(option);
     //console.log(option);
-    this.setState(()=>{
-      return {
-        error: error
-        // error
-      };
-    });
+    // this.setState(()=>{
+    //   return {
+    //     error: error
+    //     // error
+    //   };
+    // });
+    this.setState(()=>({error: error}));
+    if(!error) {
+      e.target.elements.option.value = '';
+    }
   }
   render(){
     return (
