@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import IndecisionApp from './component/app'
 import Practice from './component/practice'
 import FormUse from './component/formuse'
+import Form from './component/practiceAdd.js'
  //import User from './component/app'
 
- ReactDOM.render(<FormUse />,document.getElementById('root'));
+ ReactDOM.render(<Form />,document.getElementById('root'));
