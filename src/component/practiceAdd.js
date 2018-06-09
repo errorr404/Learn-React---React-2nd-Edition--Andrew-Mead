@@ -5,8 +5,8 @@ export default class Form extends React.Component{
      super(props);
     this.calculate = this.calculate.bind(this);
      this.state = {
-       exp: 'a+b',
-       result: 0
+       exp: 'a + b',
+       result: 'c'
      };
   }
 
@@ -49,7 +49,7 @@ export default class Form extends React.Component{
         <input type="text" name="expression"></input>
         <button>Calculate</button>
       </form>
-         <p>{this.state.exp} = {this.state.result} </p>
+         <h1>{this.state.exp} = {this.state.result} </h1>
     </div>
     );
   }
